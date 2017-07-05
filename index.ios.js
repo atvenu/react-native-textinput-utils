@@ -27,13 +27,23 @@ class RCTKeyboardToolbarHelper {
 }
 
 NativeAppEventEmitter.addListener('TUKeyboardToolbarDidTouchOnCancel', (currentUid) => {
+    console.log('Cancel');
     let eventHandler = RCTKeyboardToolbarHelper.getCallback(currentUid).onCancel;
     if (eventHandler) {
         eventHandler();
     }
 });
 
+NativeAppEventEmitter.addListener('TUKeyboardToolbarDidTouchOnFinished', (currentUid) => {
+    console.log('Finished');
+    let eventHandler = RCTKeyboardToolbarHelper.getCallback(currentUid).onFinished;
+    if (eventHandler) {
+        eventHandler();
+    }
+});
+
 NativeAppEventEmitter.addListener('TUKeyboardToolbarDidTouchOnDone', (currentUid) => {
+    console.log('Done');
     let eventHandler = RCTKeyboardToolbarHelper.getCallback(currentUid).onDone;
     if (eventHandler) {
         eventHandler();
@@ -70,6 +80,7 @@ class RCTKeyboardToolbarManager {
                 RCTKeyboardToolbarHelper.setCallback(currentUid, {
                     onCancel: callbacks.onCancel,
                     onDone: callbacks.onDone,
+                    onFinished: callbacks.onFinished,
                     onPickerSelect: callbacks.onPickerSelect,
                     onDateSelect: callbacks.onDateSelect
                 });
@@ -122,6 +133,13 @@ class RCTKeyboardToolbarTextInput extends React.Component {
                 // onDone
                 if (this.props.onDone) {
                     this.props.onDone(RCTKeyboardToolbarManager.dismissKeyboard.bind(this, this.refs.input));
+                }
+            },
+            onFinished: () => {
+                // onFinished
+                console.log('Finished Again');
+                if (this.props.onFinished) {
+                    this.props.onFinished(RCTKeyboardToolbarManager.dismissKeyboard.bind(this, this.refs.input));
                 }
             },
             onPickerSelect: this.props.onPickerSelect,

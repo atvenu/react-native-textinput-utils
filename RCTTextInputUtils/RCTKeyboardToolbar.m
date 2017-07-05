@@ -66,16 +66,24 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         numberToolbar.barStyle = toolbarStyle;
         
         NSString *leftButtonText = [RCTConvert NSString:options[@"leftButtonText"]];
+        NSString *leftButton2Text = @"Next";
         NSString *rightButtonText = [RCTConvert NSString:options[@"rightButtonText"]];
         
         NSNumber *currentUid = [RCTConvert NSNumber:options[@"uid"]];
         
         NSMutableArray *toolbarItems = [NSMutableArray array];
         if (![leftButtonText isEqualToString:@""]) {
-            UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:leftButtonText style:UIBarButtonItemStyleBordered target:self action:@selector(keyboardCancel:)];
+            UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:leftButtonText style:UIBarButtonItemStyleBordered target:self action:@selector(keyboardCancel2:)];
             leftItem.tag = [currentUid intValue];
             [toolbarItems addObject:leftItem];
         }
+        
+        if (![leftButton2Text isEqualToString:@""]) {
+            UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:leftButton2Text style:UIBarButtonItemStyleBordered target:self action:@selector(keyboardCancel:)];
+            leftItem.tag = [currentUid intValue];
+            [toolbarItems addObject:leftItem];
+        }
+        
         if (![leftButtonText isEqualToString:@""] && ![rightButtonText isEqualToString:@""]) {
             [toolbarItems addObject:[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
         }
@@ -247,6 +255,13 @@ RCT_EXPORT_METHOD(reloadPickerData:(nonnull NSNumber *)reactNode
     NSNumber *currentUid = [NSNumber numberWithLong:sender.tag];
     [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchOnCancel"
                                                     body:@([currentUid intValue])];
+}
+
+- (void)keyboardCancel2:(UIBarButtonItem*)sender
+{
+    NSNumber *currentUid = [NSNumber numberWithLong:sender.tag];
+    [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchOnFinished"
+                                                 body:@([currentUid intValue])];
 }
 
 - (void)keyboardDone:(UIBarButtonItem*)sender
