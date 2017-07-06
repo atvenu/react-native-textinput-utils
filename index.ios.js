@@ -148,7 +148,8 @@ class RCTKeyboardToolbarTextInput extends React.Component {
 
         RCTKeyboardToolbarManager.configure(this.refs.input, {
             barStyle: this.props.barStyle,
-            leftButtonText: this.props.leftButtonText,
+            leftButton1Text: this.props.leftButton1Text,
+            leftButton2Text: this.props.leftButton2Text,
             rightButtonText: this.props.rightButtonText,
             pickerViewData: pickerViewData,
             datePickerOptions: this.props.datePickerOptions,

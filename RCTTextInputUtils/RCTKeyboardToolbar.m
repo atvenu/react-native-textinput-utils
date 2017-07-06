@@ -65,8 +65,8 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         NSInteger toolbarStyle = [RCTConvert NSInteger:options[@"barStyle"]];
         numberToolbar.barStyle = toolbarStyle;
         
-        NSString *leftButtonText = [RCTConvert NSString:options[@"leftButtonText"]];
-        NSString *leftButton2Text = @"Next";
+        NSString *leftButtonText = [RCTConvert NSString:options[@"leftButton1Text"]];
+        NSString *leftButton2Text = [RCTConvert NSString:options[@"leftButton2Text"]];
         NSString *rightButtonText = [RCTConvert NSString:options[@"rightButtonText"]];
         
         NSNumber *currentUid = [RCTConvert NSNumber:options[@"uid"]];
