@@ -73,13 +73,13 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         
         NSMutableArray *toolbarItems = [NSMutableArray array];
         if (![leftButtonText isEqualToString:@""]) {
-            UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:leftButtonText style:UIBarButtonItemStyleBordered target:self action:@selector(keyboardCancel2:)];
+            UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:leftButtonText style:UIBarButtonItemStyleBordered target:self action:@selector(keyboardLeftButton1:)];
             leftItem.tag = [currentUid intValue];
             [toolbarItems addObject:leftItem];
         }
         
         if (![leftButton2Text isEqualToString:@""]) {
-            UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:leftButton2Text style:UIBarButtonItemStyleBordered target:self action:@selector(keyboardCancel:)];
+            UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:leftButton2Text style:UIBarButtonItemStyleBordered target:self action:@selector(keyboardLeftButton2:)];
             leftItem.tag = [currentUid intValue];
             [toolbarItems addObject:leftItem];
         }
@@ -88,7 +88,7 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
             [toolbarItems addObject:[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
         }
         if (![rightButtonText isEqualToString:@""]) {
-            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:rightButtonText style:UIBarButtonItemStyleDone target:self action:@selector(keyboardDone:)];
+            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:rightButtonText style:UIBarButtonItemStyleDone target:self action:@selector(keyboardRightButton:)];
             rightItem.tag = [currentUid intValue];
             [toolbarItems addObject:rightItem];
         }
@@ -250,24 +250,24 @@ RCT_EXPORT_METHOD(reloadPickerData:(nonnull NSNumber *)reactNode
                                                     body:@{@"currentUid" : [currentUid stringValue], @"selectedIndex": [selectedIndex stringValue]}];
 }
 
-- (void)keyboardCancel:(UIBarButtonItem*)sender
+- (void)keyboardLeftButton1:(UIBarButtonItem*)sender
 {
     NSNumber *currentUid = [NSNumber numberWithLong:sender.tag];
-    [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchOnCancel"
-                                                    body:@([currentUid intValue])];
-}
-
-- (void)keyboardCancel2:(UIBarButtonItem*)sender
-{
-    NSNumber *currentUid = [NSNumber numberWithLong:sender.tag];
-    [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchOnFinished"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchLeftButton1"
                                                  body:@([currentUid intValue])];
 }
 
-- (void)keyboardDone:(UIBarButtonItem*)sender
+- (void)keyboardLeftButton2:(UIBarButtonItem*)sender
 {
     NSNumber *currentUid = [NSNumber numberWithLong:sender.tag];
-    [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchOnDone"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchLeftButton2"
+                                                 body:@([currentUid intValue])];
+}
+
+- (void)keyboardRightButton:(UIBarButtonItem*)sender
+{
+    NSNumber *currentUid = [NSNumber numberWithLong:sender.tag];
+    [self.bridge.eventDispatcher sendAppEventWithName:@"TUKeyboardToolbarDidTouchRightButton"
                                                     body:@([currentUid intValue])];
 }
 
