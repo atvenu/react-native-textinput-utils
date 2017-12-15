@@ -11,6 +11,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTConvert.h>
 #import "RCTTextField.h"
+#import "RCTUITextField.h"
 #import "RCTTextView.h"
 #import <React/RCTUIManager.h>
 #import <React/RCTEventDispatcher.h>
@@ -45,14 +46,14 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         
         // The convert is little bit dangerous, change it if you are going to fock the project
         // Or do not assign any non-common property between UITextView and UITextView
-        UITextField *textView;
+        UIView<RCTBackedTextInputViewProtocol> *textView;
         if ([view class] == [RCTTextView class]) {
             RCTTextView *reactNativeTextView = ((RCTTextView *)view);
-            textView = [reactNativeTextView getTextView];
+            textView = reactNativeTextView.backedTextInputView;
         }
         else {
             RCTTextField *reactNativeTextView = ((RCTTextField *)view);
-            textView = reactNativeTextView;
+            textView = reactNativeTextView.backedTextInputView;
         }
         
         if (options[@"tintColor"]) {
@@ -80,30 +81,13 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
             [toolbarItems addObject:[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
         }
         if (![rightButtonText isEqualToString:@""]) {
-            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:rightButtonText style:UIBarButtonItemStyleDone target:self action:@selector(keyboardDone:)];
+            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:rightButtonText style:UIBarButtonItemStylePlain target:self action:@selector(keyboardDone:)];
+            rightItem.tintColor = [UIColor colorWithRed:0x29/255.0 green:0x30/255.0 blue:0x33/255.0 alpha:1.0];
+
             rightItem.tag = [currentUid intValue];
             [toolbarItems addObject:rightItem];
         }
         numberToolbar.items = toolbarItems;
-        
-        NSArray *pickerData = [RCTConvert NSArray:options[@"pickerViewData"]];
-        
-        if (pickerData.count > 0) {
-            RCTKeyboardPicker *pickerView = [[RCTKeyboardPicker alloc]init];
-            pickerView.tag = [currentUid intValue];
-            [pickerView setCallbackObject:self withSelector:@selector(valueSelected:)];
-            [pickerView setData:pickerData];
-            textView.inputView = pickerView;
-        }
-        
-        NSDictionary *datePickerViewData = [RCTConvert NSDictionary:options[@"datePickerOptions"]];
-        if(datePickerViewData != nil){
-            RCTKeyboardDatePicker *datePickerView = [[RCTKeyboardDatePicker alloc] init];
-            datePickerView.tag = [currentUid intValue];
-            [datePickerView setCallbackObject:self withSelector:@selector(dateSelected:)];
-            [datePickerView setOptions:datePickerViewData];
-            textView.inputView = datePickerView;
-        }
         
         [numberToolbar sizeToFit];
         textView.inputAccessoryView = numberToolbar;
@@ -139,8 +123,9 @@ RCT_EXPORT_METHOD(moveCursorToLast:(nonnull NSNumber *)reactNode) {
         RCTTextField *textView = ((RCTTextField *)view);
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            UITextPosition *position = [textView endOfDocument];
-            textView.selectedTextRange = [textView textRangeFromPosition:position toPosition:position];
+            UITextPosition *position = [textView.backedTextInputView endOfDocument];
+            UITextRange *range = [textView.backedTextInputView textRangeFromPosition:position toPosition:position];
+            [textView.backedTextInputView setSelectedTextRange:range notifyDelegate:YES];
         });
     }];
 }
@@ -162,9 +147,10 @@ RCT_EXPORT_METHOD(setSelectedTextRange:(nonnull NSNumber *)reactNode
         NSRange range  = NSMakeRange([startPosition integerValue], [endPosition integerValue]);
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            UITextPosition *from = [textView positionFromPosition:[textView beginningOfDocument] offset:range.location];
-            UITextPosition *to = [textView positionFromPosition:from offset:range.length];
-            [textView setSelectedTextRange:[textView textRangeFromPosition:from toPosition:to]];
+            UITextPosition *from = [textView.backedTextInputView positionFromPosition:[textView.backedTextInputView beginningOfDocument] offset:range.location];
+            UITextPosition *to = [textView.backedTextInputView positionFromPosition:from offset:range.length];
+            UITextRange *range = [textView.backedTextInputView textRangeFromPosition:from toPosition:to];
+            [textView.backedTextInputView setSelectedTextRange:range notifyDelegate:YES];
         });
     }];
 }
