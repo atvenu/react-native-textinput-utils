@@ -1,1 +1,71 @@
+# OSX
+#
 .DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Android/IJ
+#
+*.iml
+.idea
+.gradle
+local.properties
+gradle.properties
+android/DiscoverFinancial.iml
+android/app/app.iml
+my-release-key.keystore
+
+# node.js
+#
+node_modules/
+npm-debug.log
+
+# BUCK
+buck-out/
+\.buckd/
+android/app/libs
+android/keystores/debug.keystore
+android/fidolibs/EyeprintID.aar
+android/fidolibs/com.daon.sdk.faceauthenticator-0203-1.0.11.aar
+android/fidolibs/com.daon.sdk.face.rec-2.1.1.aar
+
+#Istanbul Code Coverage
+coverage/
+*.orig
+
+# Cocoapods
+apps/discover-ui-explorer/ios/Pods/
+ios/Pods/CardIO/CardIO/libCardIO.a
+ios/Pods/CardIO/CardIO/libopencv_core.a
+ios/Pods/CardIO/CardIO/libopencv_imgproc.a
+ios/Pods/LPMessagingSDK/LPMessagingSDK/LPAMS.framework/LPAMS
+ios/Pods/LPMessagingSDK/LPMessagingSDK/LPInfra.framework/LPInfra
+ios/Pods/LPMessagingSDK/LPMessagingSDK/LPMessagingSDK.framework/LPMessagingSDK
+ios/Pods/AppDynamicsAgent/iOSAgent-4.3.5.511/ADEUMInstrumentation.framework/Versions/A/ADEUMInstrumentation
+ios/Frameworks/XtifyLib/XtifyPush.embeddedframework/XtifyPush.framework/Versions/A/XtifyPush
+.sonar/
+
+#logs
+lerna-debug.log
+yarn-error.log
+
+# debug
+js/lib/config/devConfig.js
